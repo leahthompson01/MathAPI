@@ -2,7 +2,26 @@ import random
 from fastapi import FastAPI
 
 
-app = FastAPI()
+description = """
+A simple Math Quiz API that generates a 10 question Math Quiz based on what operation you use as a query parameter. ➕➖✖➗
+
+## Operation
+
+You can **read** a set of 10 quiz questions generated using the operation you passed in.
+Parameters: addition, subtraction, multiplication, division
+
+
+"""
+
+app = FastAPI(
+    title="MathQuizAPI",
+    description=description,
+    version="0.0.1",
+    contact={
+        "name": "Leah Thompson",
+        "url": "https://leahthompson.netlify.app/",
+    }
+)
 
 
 class Question:
@@ -49,14 +68,12 @@ class AnswerChoices:
 
 @app.get("/")
 async def root():
-    return {"message": "Connected to the API"}
+    return "This API generates 10 questions for a Math quiz", 200
+#     # return {"message": "Connected to the API"}
 
 
 @app.get("/quiz")
 async def createQuiz(operation: str = "addition"):
-    print(operation)
-    # if operation is None:
-    #     operation = "addition"
     allQuestions = []
     for x in range(0, 10):
         randomNum1 = random.randint(-100, 100)
