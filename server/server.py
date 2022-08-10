@@ -1,25 +1,26 @@
 import random
 from fastapi import FastAPI
 
+
 app = FastAPI()
 
 
 class Question:
     def __init__(self, operator, num1, num2):
-        if(operator == 'plus'):
+        if(operator == 'addition'):
             self.rightAnswer = num1 + num2
-            self.operand = 'sum'
-        if(operator == 'minus'):
+            self.operand = 'plus'
+        if(operator == 'subtraction'):
             self.rightAnswer = num1 - num2
-            self.operand = 'difference'
+            self.operand = 'minus'
         if(operator == 'multiplication'):
             self.rightAnswer = num1 * num2
-            self.operand = 'product'
+            self.operand = 'times'
         if(operator == 'division'):
             self.rightAnswer = num1 / num2
-            self.operand = 'quotient'
-        self.question = 'What is the ' + self.operand + \
-            ' of ' + str(num1) + ' ' + operator + ' ' + str(num2) + '?'
+            self.operand = 'divided by'
+        self.question = 'What is the result ' + \
+            ' of ' + str(num1) + ' ' + self.operand + ' ' + str(num2) + '?'
         self.answerChoices = AnswerChoices(self.rightAnswer, operator)
 
 
@@ -52,7 +53,10 @@ async def root():
 
 
 @app.get("/quiz")
-async def createQuiz(operation):
+async def createQuiz(operation: str = "addition"):
+    print(operation)
+    # if operation is None:
+    #     operation = "addition"
     allQuestions = []
     for x in range(0, 10):
         randomNum1 = random.randint(-100, 100)
