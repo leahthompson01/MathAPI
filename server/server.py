@@ -1,6 +1,6 @@
 import random
 from fastapi import FastAPI
-
+from fastapi.middleware.cors import CORSMiddleware
 
 description = """
 A simple Math Quiz API that generates a 10 question Math Quiz based on what operation you use as a query parameter. ➕➖✖➗
@@ -12,7 +12,6 @@ Parameters: addition, subtraction, multiplication, division
 
 
 """
-
 app = FastAPI(
     title="MathQuizAPI",
     description=description,
@@ -21,6 +20,14 @@ app = FastAPI(
         "name": "Leah Thompson",
         "url": "https://leahthompson.netlify.app/",
     }
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
