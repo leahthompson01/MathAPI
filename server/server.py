@@ -57,7 +57,7 @@ class AnswerChoices:
         random3 = random.randint(-100, 100)
         if(operator == 'division'):
             randomQuotient1 = round(random1/random3, 2)
-            randomQuotient2 = random.round(random2/random1, 2)
+            randomQuotient2 = round(random2/random1, 2)
             randomQuotient3 = round(random3/random2, 2)
             if(randomQuotient1 != rightAnswer and randomQuotient2 != rightAnswer and randomQuotient3 != rightAnswer):
                 if(randomQuotient1 != randomQuotient2 and randomQuotient2 != randomQuotient3 and randomQuotient1 != randomQuotient3):
