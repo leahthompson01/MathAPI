@@ -43,7 +43,7 @@ class Question:
             self.rightAnswer = num1 * num2
             self.operand = 'times'
         if(operator == 'division'):
-            self.rightAnswer = num1 / num2
+            self.rightAnswer = round(num1 / num2, 1)
             self.operand = 'divided by'
         self.question = 'What is the result ' + \
             ' of ' + str(num1) + ' ' + self.operand + ' ' + str(num2) + '?'
@@ -57,19 +57,21 @@ class AnswerChoices:
             random2 = random.randint(-100, 100)
             random3 = random.randint(-100, 100)
             if(random1/random3 != rightAnswer and random2/random1 != rightAnswer and random3/random2 != rightAnswer):
-                self.answerChoice1 = round(random1/random3, 1)
-                self.answerChoice2 = round(random2/random1, 1)
-                self.answerChoice3 = round(rightAnswer, 1)
-                self.answerChoice4 = round(random3/random2, 1)
+                if(random1 != random2 and random2 != random3 and random1 != random3):
+                    self.answerChoice1 = round(random1/random3, 1)
+                    self.answerChoice2 = round(random2/random1, 1)
+                    self.answerChoice3 = round(rightAnswer, 1)
+                    self.answerChoice4 = round(random3/random2, 1)
         if(operator != 'division'):
             random1 = random.randint(-100, 100)
             random2 = random.randint(-100, 100)
             random3 = random.randint(-100, 100)
             if(random1 != rightAnswer and random2 != rightAnswer and random3 != rightAnswer):
-                self.answerChoice1 = random1
-                self.answerChoice2 = random2
-                self.answerChoice3 = rightAnswer
-                self.answerChoice4 = random3
+                if(random1 != random2 and random2 != random3 and random1 != random3):
+                    self.answerChoice1 = random1
+                    self.answerChoice2 = random2
+                    self.answerChoice3 = rightAnswer
+                    self.answerChoice4 = random3
             # need to have some negative answer choices
 
 
