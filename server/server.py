@@ -43,7 +43,7 @@ class Question:
             self.rightAnswer = num1 * num2
             self.operand = 'times'
         if(operator == 'division'):
-            self.rightAnswer = round(num1 / num2, 1)
+            self.rightAnswer = round(num1 / num2, 2)
             self.operand = 'divided by'
         self.question = 'What is the result ' + \
             ' of ' + str(num1) + ' ' + self.operand + ' ' + str(num2) + '?'
@@ -52,20 +52,20 @@ class Question:
 
 class AnswerChoices:
     def __init__(self, rightAnswer, operator):
+        random1 = random.randint(-100, 100)
+        random2 = random.randint(-100, 100)
+        random3 = random.randint(-100, 100)
         if(operator == 'division'):
-            random1 = random.randint(-100, 100)
-            random2 = random.randint(-100, 100)
-            random3 = random.randint(-100, 100)
-            if(random1/random3 != rightAnswer and random2/random1 != rightAnswer and random3/random2 != rightAnswer):
-                if(random1 != random2 and random2 != random3 and random1 != random3):
-                    self.answerChoice1 = round(random1/random3, 1)
-                    self.answerChoice2 = round(random2/random1, 1)
-                    self.answerChoice3 = round(rightAnswer, 1)
-                    self.answerChoice4 = round(random3/random2, 1)
+            randomQuotient1 = round(random1/random3, 2)
+            randomQuotient2 = random.round(random2/random1, 2)
+            randomQuotient3 = round(random3/random2, 2)
+            if(randomQuotient1 != rightAnswer and randomQuotient2 != rightAnswer and randomQuotient3 != rightAnswer):
+                if(randomQuotient1 != randomQuotient2 and randomQuotient2 != randomQuotient3 and randomQuotient1 != randomQuotient3):
+                    self.answerChoice1 = randomQuotient1
+                    self.answerChoice2 = randomQuotient2
+                    self.answerChoice3 = round(rightAnswer, 2)
+                    self.answerChoice4 = randomQuotient3
         if(operator != 'division'):
-            random1 = random.randint(-100, 100)
-            random2 = random.randint(-100, 100)
-            random3 = random.randint(-100, 100)
             if(random1 != rightAnswer and random2 != rightAnswer and random3 != rightAnswer):
                 if(random1 != random2 and random2 != random3 and random1 != random3):
                     self.answerChoice1 = random1
