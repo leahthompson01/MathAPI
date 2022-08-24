@@ -44,8 +44,8 @@ class Question:
             print(self.rightAnswer)
             self.operand = 'times'
         if(operator == 'division'):
-            num1 = find_evenly_divisible(num1, num2)
             num2 = makeNum2Pos(num2)
+            num1 = find_evenly_divisible(num1, num2)
             self.rightAnswer = round(num1/num2)
             self.operand = 'divided by'
         self.question = 'What is the result ' + \
@@ -82,16 +82,20 @@ class AnswerChoices:
         #                 self.answerChoice4 = random3/random1
 
         # if(operator != 'division'):
-        random1 = random.randrange(rightAnswer-10, rightAnswer+10)
-        random2 = random.randrange(rightAnswer-10, rightAnswer+10)
-        random3 = random.randrange(rightAnswer-10, rightAnswer+10)
-        if(random1 != rightAnswer and random2 != rightAnswer and random3 != rightAnswer):
-            if(random1 != random2 and random2 != random3 and random1 != random3):
-                self.answerChoice1 = random1
-                self.answerChoice2 = random2
-                self.answerChoice3 = rightAnswer
-                self.answerChoice4 = random3
-            # need to have some negative answer choices
+        random1 = random.randrange(rightAnswer-15, rightAnswer+15)
+        random2 = random.randrange(rightAnswer-15, rightAnswer+15)
+        random3 = random.randrange(rightAnswer-15, rightAnswer+15)
+        while(random1 == rightAnswer or random2 == rightAnswer or random3 == rightAnswer):
+            random1 = random.randrange(rightAnswer-15, rightAnswer+15)
+            random2 = random.randrange(rightAnswer-15, rightAnswer+15)
+            random3 = random.randrange(rightAnswer-15, rightAnswer+15)
+            # if(random1 != random2 and random2 != random3 and random1 != random3):
+        self.answerChoice1 = random1
+        self.answerChoice2 = random2
+        self.answerChoice3 = rightAnswer
+        self.answerChoice4 = random3
+
+        # need to have some negative answer choices
 
 
 @app.get("/")
