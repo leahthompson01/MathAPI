@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 description = """
 A simple Math Quiz API that generates a 10 question Math Quiz based on what operation you use as a query parameter. ➕➖✖➗
 
-## Operation
+# Operation
 
 You can **read** a set of 10 quiz questions generated using the operation you passed in.
 Parameters: addition, subtraction, multiplication, division
@@ -68,32 +68,48 @@ def find_evenly_divisible(num1, num2):
         num1 = num2 * random.randint(1, 25)
     return num1
 
+# gets rid of repeat answer choices
+
+
+def makeSureNotEqual(randnum1, randnum2, randnum3, rightAnswer):
+    # for cases where at least one of the random numbers == rightAnswer
+    # but are not equal to each othder
+    while(randnum1 == rightAnswer or randnum2 == rightAnswer or randnum3 == rightAnswer):
+        randnum1 = random.randrange(rightAnswer-15, rightAnswer+15)
+        randnum2 = random.randrange(rightAnswer-15, rightAnswer+15)
+        randnum3 = random.randrange(rightAnswer-15, rightAnswer+15)
+
+    # if at least one set of randomnumbers are equal
+    while(randnum1 == randnum2 or randnum2 == randnum3 or randnum1 == randnum3):
+        randnum1 = random.randrange(rightAnswer-15, rightAnswer+15)
+        randnum2 = random.randrange(rightAnswer-15, rightAnswer+15)
+        randnum3 = random.randrange(rightAnswer-15, rightAnswer+15)
+        # checks to see if any of the new numbers are equal to the right answer
+        while(randnum1 == rightAnswer):
+            randnum1 = random.randrange(rightAnswer-15, rightAnswer+15)
+
+        while(randnum2 == rightAnswer):
+            randnum2 = random.randrange(rightAnswer-15, rightAnswer+15)
+        while(randnum3 == rightAnswer):
+            randnum3 = random.randrange(rightAnswer-15, rightAnswer+15)
+
+    listRandNums = [randnum1, randnum2, randnum3]
+    return listRandNums
+
 
 class AnswerChoices:
     def __init__(self, rightAnswer, operator):
 
-        # if(operator == 'division'):
-        #     if(random1 != rightAnswer and random2 != rightAnswer and random3 != rightAnswer):
-        #         if(random1 != random2 and random2 != random3 and random1 != random3):
-        #             if(random1 != 0 and random2 != 0 and random3 != 0):
-        #                 self.answerChoice1 = random1/random2
-        #                 self.answerChoice2 = random2/random3
-        #                 self.answerChoice3 = rightAnswer
-        #                 self.answerChoice4 = random3/random1
-
-        # if(operator != 'division'):
         random1 = random.randrange(rightAnswer-15, rightAnswer+15)
         random2 = random.randrange(rightAnswer-15, rightAnswer+15)
         random3 = random.randrange(rightAnswer-15, rightAnswer+15)
-        while(random1 == rightAnswer or random2 == rightAnswer or random3 == rightAnswer):
-            random1 = random.randrange(rightAnswer-15, rightAnswer+15)
-            random2 = random.randrange(rightAnswer-15, rightAnswer+15)
-            random3 = random.randrange(rightAnswer-15, rightAnswer+15)
-            # if(random1 != random2 and random2 != random3 and random1 != random3):
-        self.answerChoice1 = random1
-        self.answerChoice2 = random2
+        answerChoices = makeSureNotEqual(
+            random1, random2, random3, rightAnswer)
+        print(answerChoices)
+        self.answerChoice1 = answerChoices[0]
+        self.answerChoice2 = answerChoices[1]
         self.answerChoice3 = rightAnswer
-        self.answerChoice4 = random3
+        self.answerChoice4 = answerChoices[2]
 
         # need to have some negative answer choices
 
@@ -101,7 +117,6 @@ class AnswerChoices:
 @app.get("/")
 async def root():
     return "This API generates 10 questions for a Math quiz", 200
-#     # return {"message": "Connected to the API"}
 
 
 @app.get("/quiz")
