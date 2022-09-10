@@ -35,19 +35,19 @@ class Question:
     def __init__(self, operator, num1, num2):
         if(operator == 'addition'):
             self.rightAnswer = num1 + num2
-            self.operand = 'plus'
+            self.operand = "+"
         if(operator == 'subtraction'):
             self.rightAnswer = num1 - num2
-            self.operand = 'minus'
+            self.operand = "-"
         if(operator == 'multiplication'):
             self.rightAnswer = num1 * num2
             print(self.rightAnswer)
-            self.operand = 'times'
+            self.operand = "•"
         if(operator == 'division'):
             num2 = makeNum2Pos(num2)
             num1 = find_evenly_divisible(num1, num2)
             self.rightAnswer = round(num1/num2)
-            self.operand = 'divided by'
+            self.operand = "÷"
         self.question = 'What is the result ' + \
             ' of ' + str(num1) + ' ' + self.operand + ' ' + str(num2) + '?'
         self.answerChoices = AnswerChoices(self.rightAnswer, operator)
