@@ -1,8 +1,8 @@
+import logging
 import random
-import socket
-import threading
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import socketio
 
 description = """
 A simple Math Quiz API that generates a 10 question Math Quiz based on what operation you use as a query parameter. ➕➖✖➗
@@ -23,6 +23,8 @@ app = FastAPI(
         "url": "https://leahthompson.netlify.app/",
     }
 )
+
+# socket_manager = SocketManager(app=app)
 
 app.add_middleware(
     CORSMiddleware,
@@ -138,74 +140,55 @@ async def createQuiz(operation: str = "addition"):
     return allQuestions
 
 
-# def listen_for_messages(client, username):
+# code for socketio
+ 
+def handle_connect(sid, environ):
+   print(f"Socket connected with sid {sid}")
+# socket_handlers.py
 
-#     while 1:
+# create a Socket.IO server
+sio = socketio.AsyncServer()
 
-#         message = client.recv(2048).decode('utf-8')
-#         if message != '':
+# wrap with ASGI application
+newapp = socketio.ASGIApp(sio)
 
-#             final_msg = username + '~' + message
-#             send_messages_to_all(final_msg)
+# code for a user joining the socket (creating a socket)
+# sid is our session id
+@sio.event
+def connect(sid, environ, auth):
+    print('A user connected ', sid)
+    sio.enter_room(sid, 'players')
+    print('joined room')
 
-#         else:
-#             print(f"The message send from client {username} is empty")
-
-
-# def send_message_to_client(client, message):
-
-#     client.sendall(message.encode())
-
-
-# def send_messages_to_all(message):
-
-#     for user in active_clients:
-
-#         send_message_to_client(user[1], message)
-
-
-# def client_handler(client):
-
-#     # Server will listen for client message that will
-#     # Contain the username
-#     while 1:
-
-#         username = client.recv(2048).decode('utf-8')
-#         if username != '':
-#             active_clients.append((username, client))
-#             prompt_message = "SERVER~" + f"{username} added to the chat"
-#             # send_messages_to_all(prompt_message)
-#             print('added new client')
-#             break
-#         else:
-#             print("Client username is empty")
-
-#     threading.Thread(target=listen_for_messages, args=(client,
-#                                                        username, )).start()
-# # //creates the websocket
-# # in client, need to run main whenever
+@sio.event
+def join_game(sid):
+    sio.enter_room(sid, 'players')
+    print('joined room')
 
 
-# def main():
-
-#     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     global HOST
-#     global PORT
-#     try:
-#         server.bind((HOST, PORT))
-#         print(f"Running the server on {HOST} {PORT}")
-#     except:
-#         print(f"Unable to bind to host {HOST} and port {PORT}")
-
-#     server.listen(LISTENER_LIMIT)
-
-#     while 1:
-
-#         client, address = server.accept()
-#     print(f"Successfully connected to client {address[0]} {address[1]}")
-
-#     threading.Thread(target=client_handler, args=(client, )).start()
+@sio.event
+def my_message(sid, data):
+    sio.emit('room num', data, room='chat_users', skip_sid=sid)
+# need an event to send all users a code when they create a socket
+# this code is what other users will use to join same lobby
 
 
-# if __name__ == '__main__':
-#     main()
+
+
+
+@sio.event
+def disconnect(sid):
+    print('disconnect ', sid)
+
+
+# def begin_chat(sid):
+#     print(sid)
+#     sio.enter_room(sid, 'chat_users')
+#     print('chat_users')
+#     active_clients.append
+
+
+# @sio.event
+# def exit_chat(sid):
+    
+#     sio.leave_room(sid, 'chat_users')
